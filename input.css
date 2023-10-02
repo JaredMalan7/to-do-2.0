@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@layer base{
+    body{
+        max-width: 500px;
+    }
+    .user-nav{
+       
+    }
+}
