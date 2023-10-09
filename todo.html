@@ -6,23 +6,42 @@
     <link rel="stylesheet" href="./output.css">
     <script src="https://kit.fontawesome.com/e197ff9cd2.js" crossorigin="anonymous"></script>
     <title>To Do 2.0</title>
+    <script src="./todo.js" defer></script>
 </head>
 <body class="text-white bg-black">
+
+    <!-- =========NAV BAR========= -->
     <div class="">
         <div class="user-nav flex justify-between place-items-center p-4">
-            <h1>My Lists</h1>
+            <h1>My Tasks</h1>
             <div><i class="fa-solid fa-user bg-white p-2 rounded-2xl" style="color: #000000;"></i></div>
         </div>
     </div>
-    <div id="taskContainer" class="p-4 flex">
-        <i class="fa-regular fa-clipboard" style="color: #0073ff;"></i>
+
+
+
+    <!-- ========== BODY ========== -->
+    <div id="taskContainer" class="p-4 flex flex-col">
+        <!-- ========CLIPBOARD ICON======== -->
+        <!-- <i class="fa-regular fa-clipboard" style="color: #0073ff;"></i> -->
+
+
+
 
     </div>
-    <div class="btn-container flex justify-center">
-        <button id="createTaskBtn" class="create-btn bg-primary-blue p-3 rounded-3xl">
+    <button id="add-task" class="ml-4" onclick="createTask()">
+        <i class="fa-solid fa-plus mr-1 add-task bg-primary-blue  rounded-2xl" style="color: #ffffff;"></i>
+    </button>
+
+    <!-- ===========BUTTON CONTAINER========= -->
+    <div class="btn-container flex justify-center flex-col">
+        <!-- <div class="inputContainer w-10/12">
+            <input type="text" name="taskName" id="taskNameInput" placeholder="Type Task Name" class="w-full p-2 rounded-3xl text-black">
+        </div> -->
+        <!-- <button id="createTaskBtn" class="create-btn bg-primary-blue p-3 rounded-3xl w-fit">
             <i class="fa-solid fa-plus mr-1" style="color: #ffffff;"></i>
-            Create List
-        </button>
+            Create Task
+        </button> -->
     </div>
     
 </body>

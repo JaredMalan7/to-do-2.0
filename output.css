@@ -451,6 +451,19 @@ i.fa-clipboard{
   font-size: 25px;
 }
 
+#createTaskBtn{
+  margin: 1em auto;
+}
+
+.inputContainer{
+  margin: 0 auto;
+  display: none;
+}
+
+.add-task{
+  padding: .48rem .6rem;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -551,12 +564,33 @@ i.fa-clipboard{
   --tw-backdrop-sepia:  ;
 }
 
+.ml-4 {
+  margin-left: 1rem;
+}
+
 .mr-1 {
   margin-right: 0.25rem;
 }
 
 .flex {
   display: flex;
+}
+
+.w-10\/12 {
+  width: 83.333333%;
+}
+
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.flex-col {
+  flex-direction: column;
 }
 
 .place-items-center {
@@ -604,6 +638,11 @@ i.fa-clipboard{
 
 .p-4 {
   padding: 1rem;
+}
+
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 
 .text-white {

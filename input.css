@@ -18,5 +18,17 @@
     i.fa-clipboard{
         font-size: 25px;
     }
-    
+    #createTaskBtn{
+        margin: 1em auto;
+    }
+
+    .inputContainer{
+        margin: 0 auto;
+        display: none;
+    }
+
+    .add-task{
+        padding: .48rem .6rem;
+    }
+
 }
