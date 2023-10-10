@@ -15,7 +15,6 @@ function loadtasksFromLocalStorage(){
     
     }
 }
-
 loadtasksFromLocalStorage()
 
 function createTask(){
@@ -73,8 +72,6 @@ function renderTasks(){
         editButton.setAttribute("data-type", "task")
         //Thi is to use the data attribute to store the taskIndex for this button
         editButton.setAttribute("data-task-index", i)
-
-
         editButton.addEventListener("click", function(event){
             let taskIndex = event.target.getAttribute("data-task-index")
             editTask(taskIndex)
@@ -90,15 +87,15 @@ function renderTasks(){
             deleteTask(i)
 
         })
-
         //=============OPEN LIST BUTTON==============
         let openTask = document.createElement("i")
         openTask.className = "fa-solid fa-chevron-right"
         openTask.style.color = "#0073ff"
         openTask.style.fontSize = "25px"
         openTask.setAttribute("data-type", "task")
-
-    
+        openTask.addEventListener("click", function(){
+            openTask(i)
+        })
 
         taskElement.appendChild(listItem)
         listItem.appendChild(editButton)
@@ -109,14 +106,11 @@ function renderTasks(){
 
     }
 }
-
 function setActiveTask(index){
     activeTaskIndex = index
 }
 
-
 //=============DELETE TASK FUNCTION===========
-
 function deleteTask(taskIndex){
     if (confirm("Are you sure you want to delete this task?")){
         tasks.splice(taskIndex, 1)
@@ -129,20 +123,12 @@ function deleteTask(taskIndex){
 }
 
 //=============EDIT TASK FUNCTION================
-
 let editInputField = null
-
 function editTask(taskIndex){
     let taskObject = document.getElementById("taskContainer").children[taskIndex]
     let taskNameElement = taskObject.querySelector(".task-name")
-
     // Get the existing task name
     let currentTaskName = taskNameElement.textContent
-
-    //this is meant to hide the task name element
-    // taskNameElement.style.display = "none"
-
-
     //Display the input field and set its value to the task name
     //If the input field does not exist, create it
     if (!editInputField){
@@ -152,47 +138,36 @@ function editTask(taskIndex){
         editInputField.style.marginRight = "3em"
         editInputField.style.padding = ".5em"
     }
-
-
-
-//    inputField.value = currentTaskName
-//    taskObject.appendChild(inputField) //I commented this out because I am appending it down using the insert before method
-
-
     // This is meant for convenience to focus on the input field
     editInputField.focus()
-
     // Thi is to add an event listener to handle the editing
     editInputField.addEventListener("blur", function(){
-
         //When the input field loses focus, update the task name
         let newTaskName = editInputField.value
         tasks[taskIndex].taskName = newTaskName
-
-
         //hide the input field an show the updated task name
         editInputField.style.display = "none"
         taskNameElement.style.display = "block"
         taskNameElement.textContent = newTaskName
-
-
         saveTasksToLocalStorage()
     })
-
-
     editInputField.addEventListener("keyup", function(event){
-
         if(event.keyCode === 13){
             editInputField.blur()
         }
     })
-
     editInputField.value = currentTaskName
     editInputField.style.display = "block"
     taskNameElement.style.display = "none"
-
-
     taskObject.insertBefore(editInputField, taskObject.querySelector(".buttons-container"));
+}
+
+//============OPEN TASK FUNCTION============
+
+function openTask(taskIndex){
+
+
+    saveTasksToLocalStorage()
 }
 
 renderTasks()
