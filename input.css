@@ -18,6 +18,10 @@
     i.fa-clipboard{
         font-size: 25px;
     }
+
+    i{
+        cursor: pointer;
+    }
     #createTaskBtn{
         margin: 1em auto;
     }

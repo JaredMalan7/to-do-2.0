@@ -4,7 +4,7 @@ let activeTaskIndex = null
 
 function saveTasksToLocalStorage(){
     localStorage.setItem("tasks", JSON.stringify(tasks))
-    console.log("tasks save to LovalStorage", tasks)
+    console.log("tasks save to LocalStorage", tasks)
 }
 
 function loadtasksFromLocalStorage(){
@@ -27,11 +27,8 @@ function createTask(){
     activeTaskIndex = tasks.length -1
     console.log(task)
     renderTasks()
-
-
     saveTasksToLocalStorage();
 }
-// let newTask = document.getElementById('add-task');
 
 function renderTasks(){
     let taskElement = document.getElementById("taskContainer")
@@ -45,17 +42,20 @@ function renderTasks(){
         listItem.style.padding = "1em 0"
         listItem.style.display = "flex"
         listItem.style.alignItems = "center"
+        listItem.className = "task-container"
 
         //============BUTTONS CONTAINER=============
         let buttons = document.createElement("div")
         buttons.style.display = "flex"
-        buttons.style.gap= "3em"
+        buttons.style.gap = "3em"
+        buttons.className = "buttons-container"
 
         //=============TASK=============
         let taskObject = document.createElement("div")
         taskObject.style.fontSize = "25px"
         taskObject.style.width = "100%"
-        taskObject.id = "taskName"
+        // taskObject.id = "taskName"
+        taskObject.classList.add("task-name") //this replaces the id for a class so that we don't have multiple objects with the same taskName id name
         taskObject.textContent = "Untitled"
 
         //=============EDIT BUTTON==============
@@ -65,8 +65,13 @@ function renderTasks(){
         editButton.style.fontSize = "25px"
         editButton.style.marginRight = "2em"
         editButton.setAttribute("data-type", "task")
-        editButton.addEventListener("click", function(){
-            editTask(activeTaskIndex, index)
+        //Thi is to use the data attribute to store the taskIndex for this button
+        editButton.setAttribute("data-task-index", i)
+
+
+        editButton.addEventListener("click", function(event){
+            let taskIndex = event.target.getAttribute("data-task-index")
+            editTask(taskIndex)
         })
 
         //=============DELETE BUTTON============
@@ -77,8 +82,6 @@ function renderTasks(){
         deleteButton.setAttribute("data-type", "task")
         deleteButton.addEventListener("click", function(){
             deleteTask(i)
-
-            listItem.appendChild(deleteButton)
 
         })
 
@@ -117,6 +120,60 @@ function deleteTask(taskIndex){
         renderTasks()
     }
     saveTasksToLocalStorage(activeTaskIndex)
+}
+
+//=============EDIT TASK FUNCTION================
+
+
+function editTask(taskIndex){
+    let taskObject = document.getElementById("taskContainer").children[taskIndex]
+    let taskNameElement = taskObject.querySelector(".task-name")
+
+    // Get the existing task name
+    let currentTaskName = taskNameElement.textContent
+
+    //this is meant to hide the task name element
+    taskNameElement.style.display = "none"
+
+
+    //Display the input field and set its value to the task name
+   let inputField = document.createElement("input")
+   inputField.style.width = "100%"
+   inputField.style.color = "black"
+   inputField.style.marginRight = "3em"
+   inputField.value = currentTaskName
+//    taskObject.appendChild(inputField) //I commented this out because I am appending it down using the insert before method
+
+
+    // This is meant for convenience to focus on the input field
+    inputField.focus()
+
+    // Thi is to add an event listener to handle the editing
+    inputField.addEventListener("blur", function(){
+
+        //When the input field loses focus, update the task name
+        let newTaskName = inputField.value
+        tasks[taskIndex].taskName = newTaskName
+
+
+        //hide the input field an show the updated task name
+        inputField.style.display = "none"
+        taskNameElement.style.display = "block"
+        taskNameElement.textContent = newTaskName
+
+
+        saveTasksToLocalStorage()
+    })
+
+
+    inputField.addEventListener("keyup", function(event){
+
+        if(event.keyCode === 13){
+            inputField.blur()
+        }
+    })
+
+    taskObject.insertBefore(inputField, taskObject.querySelector(".buttons-container"));
 }
 
 renderTasks()
