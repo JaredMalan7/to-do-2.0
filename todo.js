@@ -141,6 +141,7 @@ function editTask(taskIndex){
    inputField.style.width = "100%"
    inputField.style.color = "black"
    inputField.style.marginRight = "3em"
+   inputField.style.padding = ".5em"
    inputField.value = currentTaskName
 //    taskObject.appendChild(inputField) //I commented this out because I am appending it down using the insert before method
 
