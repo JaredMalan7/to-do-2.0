@@ -66,7 +66,7 @@ function renderTasks(){
 
         //=============EDIT BUTTON==============
         let editButton = document.createElement("i")
-        editButton.className = "fa-regular fa-clipboard"
+        editButton.className = "fa-solid fa-pen-to-square"
         editButton.style.color = "#0073ff"
         editButton.style.fontSize = "25px"
         editButton.style.marginRight = "2em"
@@ -130,6 +130,7 @@ function deleteTask(taskIndex){
 
 //=============EDIT TASK FUNCTION================
 
+let editInputField = null
 
 function editTask(taskIndex){
     let taskObject = document.getElementById("taskContainer").children[taskIndex]
@@ -139,32 +140,38 @@ function editTask(taskIndex){
     let currentTaskName = taskNameElement.textContent
 
     //this is meant to hide the task name element
-    taskNameElement.style.display = "none"
+    // taskNameElement.style.display = "none"
 
 
     //Display the input field and set its value to the task name
-   let inputField = document.createElement("input")
-   inputField.style.width = "100%"
-   inputField.style.color = "black"
-   inputField.style.marginRight = "3em"
-   inputField.style.padding = ".5em"
-   inputField.value = currentTaskName
+    //If the input field does not exist, create it
+    if (!editInputField){
+        editInputField = document.createElement("input")
+        editInputField.style.width = "100%"
+        editInputField.style.color = "black"
+        editInputField.style.marginRight = "3em"
+        editInputField.style.padding = ".5em"
+    }
+
+
+
+//    inputField.value = currentTaskName
 //    taskObject.appendChild(inputField) //I commented this out because I am appending it down using the insert before method
 
 
     // This is meant for convenience to focus on the input field
-    inputField.focus()
+    editInputField.focus()
 
     // Thi is to add an event listener to handle the editing
-    inputField.addEventListener("blur", function(){
+    editInputField.addEventListener("blur", function(){
 
         //When the input field loses focus, update the task name
-        let newTaskName = inputField.value
+        let newTaskName = editInputField.value
         tasks[taskIndex].taskName = newTaskName
 
 
         //hide the input field an show the updated task name
-        inputField.style.display = "none"
+        editInputField.style.display = "none"
         taskNameElement.style.display = "block"
         taskNameElement.textContent = newTaskName
 
@@ -173,14 +180,19 @@ function editTask(taskIndex){
     })
 
 
-    inputField.addEventListener("keyup", function(event){
+    editInputField.addEventListener("keyup", function(event){
 
         if(event.keyCode === 13){
-            inputField.blur()
+            editInputField.blur()
         }
     })
 
-    taskObject.insertBefore(inputField, taskObject.querySelector(".buttons-container"));
+    editInputField.value = currentTaskName
+    editInputField.style.display = "block"
+    taskNameElement.style.display = "none"
+
+
+    taskObject.insertBefore(editInputField, taskObject.querySelector(".buttons-container"));
 }
 
 renderTasks()
