@@ -20,9 +20,15 @@ loadtasksFromLocalStorage()
 
 function createTask(){
     let task = {
+        // taskName : activeTaskIndex !== null ? tasks[activeTaskIndex].
         taskName : "Untitled",
         itemList : []
     }
+
+    if (activeTaskIndex !== null && tasks[activeTaskIndex].taskName.trim() !== ""){
+        task.taskName = tasks[activeTaskIndex].taskName
+    }
+
     tasks.push(task)
     activeTaskIndex = tasks.length -1
     console.log(task)
@@ -56,7 +62,7 @@ function renderTasks(){
         taskObject.style.width = "100%"
         // taskObject.id = "taskName"
         taskObject.classList.add("task-name") //this replaces the id for a class so that we don't have multiple objects with the same taskName id name
-        taskObject.textContent = "Untitled"
+        taskObject.textContent = taskName
 
         //=============EDIT BUTTON==============
         let editButton = document.createElement("i")
