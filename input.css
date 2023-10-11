@@ -35,4 +35,8 @@
         padding: .48rem .6rem;
     }
 
+    #toDoList{
+        background-color: rgb(25, 25, 25);
+    }
+
 }

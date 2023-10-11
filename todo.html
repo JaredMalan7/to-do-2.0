@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
     <title>To Do 2.0</title>
     <script src="./todo.js" defer></script>
 </head>
-<body class="text-white bg-black">
+<body class="text-white bg-black h-full flex flex-col">
 
     <!-- =========NAV BAR========= -->
     <div class="">
@@ -18,25 +18,27 @@
         </div>
     </div>
 
+    <div class="body-container flex">
+        <!-- ========== TASK CONTAINER========== -->
+        <div id="taskContainer" class="p-4 flex flex-col place-items-center w-full">
 
+            
+            
+        </div>
 
-    <!-- ========== BODY ========== -->
-    <div id="taskContainer" class="p-4 flex flex-col place-items-center">
-        <!-- ========CLIPBOARD ICON======== -->
-        <!-- <i class="fa-regular fa-clipboard" style="color: #0073ff;"></i> -->
-
-
-
-
+        <!-- ============TO DO LIST=========== -->
+        <div class="w-0 h-full flex flex-col place-items-center" id="toDoList">
+            <!-- <div class="w-0 p-4 flex flex-col place-items-center">
+                task
+            </div> -->
+        </div>
     </div>
-    <button id="add-task" class="ml-4" onclick="createTask()">
-        <i class="fa-solid fa-plus mr-1 add-task bg-primary-blue  rounded-2xl" style="color: #ffffff;"></i>
+
+
+    <!-- =========CREATE TASK BUTTON=========== -->
+    <button id="add-task" class="ml-4 w-fit" onclick="createTask()">
+        <i class="fa-solid fa-plus mr-1 add-task bg-primary-blue rounded-2xl" style="color: #ffffff;"></i>
     </button>
-
-    <!-- ===========BUTTON CONTAINER========= -->
-    <div class="btn-container flex justify-center flex-col">
-
-    </div>
-    
+        
 </body>
 </html>

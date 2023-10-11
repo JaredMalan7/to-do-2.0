@@ -21,7 +21,7 @@ function createTask(){
     let task = {
         // taskName : activeTaskIndex !== null ? tasks[activeTaskIndex].
         taskName : "Untitled",
-        itemList : []
+        toDoList : []
     }
 
     if (activeTaskIndex !== null && tasks[activeTaskIndex].taskName.trim() !== ""){
@@ -87,22 +87,21 @@ function renderTasks(){
             deleteTask(i)
 
         })
-        //=============OPEN LIST BUTTON==============
-        let openTask = document.createElement("i")
-        openTask.className = "fa-solid fa-chevron-right"
-        openTask.style.color = "#0073ff"
-        openTask.style.fontSize = "25px"
-        openTask.setAttribute("data-type", "task")
-        openTask.addEventListener("click", function(){
-            openTask(i)
-        })
+        //=============OPEN TASK BUTTON==============
+        let openTaskButton = document.createElement("i")
+        openTaskButton.className = "fa-solid fa-chevron-right"
+        openTaskButton.style.color = "#0073ff"
+        openTaskButton.style.fontSize = "25px"
+        openTaskButton.setAttribute("data-type", "task")
+        openTaskButton.addEventListener("click", openTask)
+        
 
         taskElement.appendChild(listItem)
         listItem.appendChild(editButton)
         listItem.appendChild(taskObject)
         listItem.appendChild(buttons)
         buttons.appendChild(deleteButton)
-        buttons.appendChild(openTask)
+        buttons.appendChild(openTaskButton)
 
     }
 }
@@ -123,7 +122,8 @@ function deleteTask(taskIndex){
 }
 
 //=============EDIT TASK FUNCTION================
-let editInputField = null
+let editInputFields = []
+// let editInputField = null
 function editTask(taskIndex){
     let taskObject = document.getElementById("taskContainer").children[taskIndex]
     let taskNameElement = taskObject.querySelector(".task-name")
@@ -131,43 +131,53 @@ function editTask(taskIndex){
     let currentTaskName = taskNameElement.textContent
     //Display the input field and set its value to the task name
     //If the input field does not exist, create it
-    if (!editInputField){
-        editInputField = document.createElement("input")
-        editInputField.style.width = "100%"
-        editInputField.style.color = "black"
-        editInputField.style.marginRight = "3em"
-        editInputField.style.padding = ".5em"
+    if (!editInputFields[taskIndex]){
+        editInputFields[taskIndex] = document.createElement("input")
+        editInputFields[taskIndex].style.width = "100%"
+        editInputFields[taskIndex].style.color = "black"
+        editInputFields[taskIndex].style.marginRight = "3em"
+        editInputFields[taskIndex].style.padding = ".5em"
     }
     // This is meant for convenience to focus on the input field
-    editInputField.focus()
+    editInputFields[taskIndex].focus()
     // Thi is to add an event listener to handle the editing
-    editInputField.addEventListener("blur", function(){
+    editInputFields[taskIndex].addEventListener("blur", function(){
         //When the input field loses focus, update the task name
-        let newTaskName = editInputField.value
+        let newTaskName = editInputFields[taskIndex].value
         tasks[taskIndex].taskName = newTaskName
         //hide the input field an show the updated task name
-        editInputField.style.display = "none"
+        editInputFields[taskIndex].style.display = "none"
         taskNameElement.style.display = "block"
         taskNameElement.textContent = newTaskName
         saveTasksToLocalStorage()
     })
-    editInputField.addEventListener("keyup", function(event){
+    editInputFields[taskIndex].addEventListener("keyup", function(event){
         if(event.keyCode === 13){
-            editInputField.blur()
+            editInputFields[taskIndex].blur()
         }
     })
-    editInputField.value = currentTaskName
-    editInputField.style.display = "block"
+    editInputFields[taskIndex].value = currentTaskName
+    editInputFields[taskIndex].style.display = "block"
     taskNameElement.style.display = "none"
-    taskObject.insertBefore(editInputField, taskObject.querySelector(".buttons-container"));
+    taskObject.insertBefore(editInputFields[taskIndex], taskObject.querySelector(".buttons-container"));
 }
 
 //============OPEN TASK FUNCTION============
 
-function openTask(taskIndex){
+function openTask(){
+   const toDoList = document.getElementById("toDoList")
+   const taskContainer = document.getElementById("taskContainer")
 
+   taskContainer.style.transform = "translateX(0)"
+   toDoList.style.transform = "translateX(100%)"
 
-    saveTasksToLocalStorage()
+   taskContainer.style.transition = "transform 0.5s ease-in-out"
+   toDoList.style.transition = "transform 0.5s ease-in-out"
+
+   setTimeout(() =>{
+    taskContainer.style.transform = "translateX(-100%)"
+    toDoList.style.transform = "translateX(0)"
+   }, 100)
 }
 
 renderTasks()
