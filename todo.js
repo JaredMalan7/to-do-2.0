@@ -1,5 +1,6 @@
 //CREATE A TASK OBJECT THAT CONTAINS A TAKSNAME AND TASKS ARRAY
 let tasks = []
+let taskNameHeading;
 let activeTaskIndex = null
 
 function saveTasksToLocalStorage(){
@@ -17,24 +18,29 @@ function loadtasksFromLocalStorage(){
 }
 loadtasksFromLocalStorage()
 
+
 function createTask(){
+
     let task = {
-        // taskName : activeTaskIndex !== null ? tasks[activeTaskIndex].
         taskName : "Untitled",
         toDoList : []
     }
 
     if (activeTaskIndex !== null && tasks[activeTaskIndex].taskName.trim() !== ""){
         task.taskName = tasks[activeTaskIndex].taskName
+
+
+
     }
 
     tasks.push(task)
     activeTaskIndex = tasks.length -1
     console.log(task)
     renderTasks()
+    renderToDoButtons(task)
     saveTasksToLocalStorage();
 }
-
+//===============FUNCTION TO RENDER ALL TASK===============
 function renderTasks(){
     let taskElement = document.getElementById("taskContainer")
     taskElement.innerHTML = "";
@@ -74,7 +80,7 @@ function renderTasks(){
         editButton.setAttribute("data-task-index", i)
         editButton.addEventListener("click", function(event){
             let taskIndex = event.target.getAttribute("data-task-index")
-            editTask(taskIndex)
+            editTask(taskIndex,taskNameHeading)
         })
 
         //=============DELETE BUTTON============
@@ -102,9 +108,64 @@ function renderTasks(){
         listItem.appendChild(buttons)
         buttons.appendChild(deleteButton)
         buttons.appendChild(openTaskButton)
-
+        
     }
+
+    //=== DYNAMICALY CREATES THE CREATE TASK BUTTON ===
+    let buttonContainer = document.getElementById("taskContainer")
+    let addButton = document.createElement("button")
+    addButton.id = "add-task"
+    addButton.className = "ml-4 w-fit"
+    addButton.addEventListener("click", createTask)
+
+    let addIcon = document.createElement("i")
+    addIcon.className = "fa-solid fa-plus mr-1 add-task bg-primary-blue rounded-2xl"
+    addIcon.style.color = "white"
+
+    addButton.appendChild(addIcon)
+    buttonContainer.appendChild(addButton)
 }
+
+function renderToDoButtons(task){
+    let toDoListElement = document.getElementById("toDoList")
+    toDoListElement.innerHTML = ""
+    //CONTAINER FORT HE GO BACK BUTTON & HEADING
+    let toDoHeading = document.createElement("div")
+    toDoHeading.className = "toDoHeading flex place-items-center w-full"
+
+    // GENERATES THE GO BACK BUTTON
+    let goBackButton  = document.createElement("i")
+    goBackButton.className = "fa-solid fa-chevron-left"
+    goBackButton.style.color = "#0073ff"
+    goBackButton.style.fontSize = "25px"
+    goBackButton.style.width = "10%"
+    // goBackButton.style.marginRight = "-15.63px"
+    goBackButton.addEventListener("click", closeTask)
+
+    // GENERATES THE TASK NAME HEADING
+    if(task && task.taskName){
+        taskNameHeading = taskNameHeading || document.createElement("h2")
+        taskNameHeading.className = "w-80 text-center"
+        taskNameHeading.textContent = task.taskName
+    } else {
+        taskNameHeading = taskNameHeading || document.createElement("h2")
+        taskNameHeading.className = "w-80 text-center"
+        taskNameHeading.textContent = "Untitled"
+    }
+    // GENERTES THE ADD TO DO BUTTON
+    let addToDoButton = document.createElement("button")
+    addToDoButton.id = "addToDoButton"
+    addToDoButton.className = "w-fit bg-primary-blue p-3 rounded-3xl flex flex-col justify-center place-items-center mt-4"
+    addToDoButton.textContent = `Add To Do`
+
+    toDoListElement.appendChild(toDoHeading)
+    toDoHeading.appendChild(goBackButton)
+    toDoHeading.appendChild(taskNameHeading)
+    toDoListElement.appendChild(addToDoButton)
+   
+}
+
+
 function setActiveTask(index){
     activeTaskIndex = index
 }
@@ -122,9 +183,11 @@ function deleteTask(taskIndex){
 }
 
 //=============EDIT TASK FUNCTION================
+
+//This array separates all input fields so that each task has its own, rather than all sharing the same, which could cause issues by editing all names of tasks at once.
 let editInputFields = []
-// let editInputField = null
-function editTask(taskIndex){
+
+function editTask(taskIndex, taskNameHeading){
     let taskObject = document.getElementById("taskContainer").children[taskIndex]
     let taskNameElement = taskObject.querySelector(".task-name")
     // Get the existing task name
@@ -145,10 +208,17 @@ function editTask(taskIndex){
         //When the input field loses focus, update the task name
         let newTaskName = editInputFields[taskIndex].value
         tasks[taskIndex].taskName = newTaskName
+
+        if(taskNameHeading){
+            taskNameHeading.textContent = newTaskName
+        }
+        
         //hide the input field an show the updated task name
         editInputFields[taskIndex].style.display = "none"
         taskNameElement.style.display = "block"
         taskNameElement.textContent = newTaskName
+
+        renderTasks()
         saveTasksToLocalStorage()
     })
     editInputFields[taskIndex].addEventListener("keyup", function(event){
@@ -162,22 +232,46 @@ function editTask(taskIndex){
     taskObject.insertBefore(editInputFields[taskIndex], taskObject.querySelector(".buttons-container"));
 }
 
-//============OPEN TASK FUNCTION============
+//============OPEN TASKS FUNCTION============
 
 function openTask(){
    const toDoList = document.getElementById("toDoList")
    const taskContainer = document.getElementById("taskContainer")
 
-   taskContainer.style.transform = "translateX(0)"
-   toDoList.style.transform = "translateX(100%)"
+   taskContainer.style.transition = "width 0.5s ease-in-out, padding 0.6s ease-in-out, opacity 0.4s ease-in-out";
+   toDoList.style.transition = "width 0.5s ease-in-out, padding 0.5s ease-in-out, opacity 0.5s ease-in-out";
 
-   taskContainer.style.transition = "transform 0.5s ease-in-out"
-   toDoList.style.transition = "transform 0.5s ease-in-out"
+   // Hide the taskContainer by reducing its width and padding to 0
+   taskContainer.style.width = "0";
+   taskContainer.style.padding = "0";
+   taskContainer.style.opacity = "0"
 
-   setTimeout(() =>{
-    taskContainer.style.transform = "translateX(-100%)"
-    toDoList.style.transform = "translateX(0)"
-   }, 100)
+   // Expand the toDoList by increasing its width to 100% and adding padding
+   toDoList.style.width = "100%";
+   toDoList.style.padding = "2rem";
+   toDoList.style.opacity = "100"
+   renderToDoButtons()
 }
+
+
+//============CLOSE TASK FUNCTION============
+
+function closeTask(){
+    const toDoList = document.getElementById("toDoList")
+    const taskContainer = document.getElementById("taskContainer")
+ 
+    taskContainer.style.transition = "width 0.5s ease-in-out, padding .6s ease-in-out, opacity 0.65s ease-in-out";
+    toDoList.style.transition = "width 0.5s ease-in-out, padding .6s ease-in-out, opacity 0.5s ease-in-out";
+    // Hide the taskContainer by reducing its width and padding to 0
+    toDoList.style.width = "0";
+    toDoList.style.padding = "0";
+    toDoList.style.opacity = "0"
+ 
+    // Expand the toDoList by increasing its width to 100% and adding padding
+    taskContainer.style.width = "100%";
+    taskContainer.style.padding = "1rem";
+    taskContainer.style.opacity = "100"
+ }
+
 
 renderTasks()
