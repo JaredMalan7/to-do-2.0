@@ -98,9 +98,13 @@ function renderTasks(){
         openTaskButton.className = "fa-solid fa-chevron-right"
         openTaskButton.style.color = "#0073ff"
         openTaskButton.style.fontSize = "25px"
+        openTaskButton.setAttribute("data-task-index", i)
         openTaskButton.setAttribute("data-type", "task")
-        openTaskButton.addEventListener("click", openTask)
-        
+        // openTaskButton.addEventListener("click", openTask)
+        openTaskButton.addEventListener("click", function(event){
+            let taskIndex = event.target.getAttribute("data-task-index")
+            openTask(taskIndex)
+        })
 
         taskElement.appendChild(listItem)
         listItem.appendChild(editButton)
@@ -125,8 +129,8 @@ function renderTasks(){
     addButton.appendChild(addIcon)
     buttonContainer.appendChild(addButton)
 }
-
-function renderToDoButtons(task){
+//=========FUNCTION TO RENDER TO DO BUTTONS========
+function renderToDoButtons(taskIndex){
     let toDoListElement = document.getElementById("toDoList")
     toDoListElement.innerHTML = ""
     //CONTAINER FORT HE GO BACK BUTTON & HEADING
@@ -143,15 +147,17 @@ function renderToDoButtons(task){
     goBackButton.addEventListener("click", closeTask)
 
     // GENERATES THE TASK NAME HEADING
-    if(task && task.taskName){
+    if(taskIndex !== null && tasks[taskIndex] && tasks[taskIndex].taskName){
         taskNameHeading = taskNameHeading || document.createElement("h2")
         taskNameHeading.className = "w-80 text-center"
-        taskNameHeading.textContent = task.taskName
+        taskNameHeading.textContent = tasks[taskIndex].taskName
+        
     } else {
         taskNameHeading = taskNameHeading || document.createElement("h2")
         taskNameHeading.className = "w-80 text-center"
         taskNameHeading.textContent = "Untitled"
     }
+    console.log(taskIndex)
     // GENERTES THE ADD TO DO BUTTON
     let addToDoButton = document.createElement("button")
     addToDoButton.id = "addToDoButton"
@@ -165,11 +171,9 @@ function renderToDoButtons(task){
    
 }
 
-
 function setActiveTask(index){
     activeTaskIndex = index
 }
-
 //=============DELETE TASK FUNCTION===========
 function deleteTask(taskIndex){
     if (confirm("Are you sure you want to delete this task?")){
@@ -233,8 +237,7 @@ function editTask(taskIndex, taskNameHeading){
 }
 
 //============OPEN TASKS FUNCTION============
-
-function openTask(){
+function openTask(activeTaskIndex){
    const toDoList = document.getElementById("toDoList")
    const taskContainer = document.getElementById("taskContainer")
 
@@ -250,9 +253,8 @@ function openTask(){
    toDoList.style.width = "100%";
    toDoList.style.padding = "2rem";
    toDoList.style.opacity = "100"
-   renderToDoButtons()
+   renderToDoButtons(activeTaskIndex)
 }
-
 
 //============CLOSE TASK FUNCTION============
 
