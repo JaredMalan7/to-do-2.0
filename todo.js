@@ -37,7 +37,7 @@ function createTask(){
     activeTaskIndex = tasks.length -1
     console.log(task)
     renderTasks()
-    renderToDoButtons(task)
+    renderToDos(task)
     saveTasksToLocalStorage();
 }
 //===============FUNCTION TO RENDER ALL TASK===============
@@ -130,7 +130,7 @@ function renderTasks(){
     buttonContainer.appendChild(addButton)
 }
 //=========FUNCTION TO RENDER TO DO BUTTONS========
-function renderToDoButtons(taskIndex){
+function renderToDos(taskIndex){
     let toDoListElement = document.getElementById("toDoList")
     toDoListElement.innerHTML = ""
     //CONTAINER FORT HE GO BACK BUTTON & HEADING
@@ -150,11 +150,13 @@ function renderToDoButtons(taskIndex){
     if(taskIndex !== null && tasks[taskIndex] && tasks[taskIndex].taskName){
         taskNameHeading = taskNameHeading || document.createElement("h2")
         taskNameHeading.className = "w-80 text-center"
+        taskNameHeading.style.fontSize = "25px"
         taskNameHeading.textContent = tasks[taskIndex].taskName
         
     } else {
         taskNameHeading = taskNameHeading || document.createElement("h2")
         taskNameHeading.className = "w-80 text-center"
+        taskNameHeading.style.fontSize = "25px"
         taskNameHeading.textContent = "Untitled"
     }
     console.log(taskIndex)
@@ -253,7 +255,7 @@ function openTask(activeTaskIndex){
    toDoList.style.width = "100%";
    toDoList.style.padding = "2rem";
    toDoList.style.opacity = "100"
-   renderToDoButtons(activeTaskIndex)
+   renderToDos(activeTaskIndex)
 }
 
 //============CLOSE TASK FUNCTION============
