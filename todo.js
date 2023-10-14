@@ -26,12 +26,12 @@ function createTask(){
         toDoList : []
     }
 
-    if (activeTaskIndex !== null && tasks[activeTaskIndex].taskName.trim() !== ""){
-        task.taskName = tasks[activeTaskIndex].taskName
+    // if (activeTaskIndex !== null && tasks[activeTaskIndex].taskName.trim() !== ""){
+    //     task.taskName = tasks[activeTaskIndex].taskName
 
 
 
-    }
+    // }
 
     tasks.push(task)
     activeTaskIndex = tasks.length -1
@@ -131,16 +131,29 @@ function renderTasks(){
 }
 //=========CREATES TO-DO ELEMENTS=============
 function addToDo(taskIndex){
+    event.preventDefault()
+    
     if(activeTaskIndex === taskIndex) {
         let task = tasks[taskIndex]
-        let newToDo = {
-            description: "New To-Do",
-            completed: false,
-        }
+        let toDoInput = document.querySelector("#toDoList input[type='text']")
 
-        task.toDoList.push(newToDo)
-        saveTasksToLocalStorage()
-        renderToDos(taskIndex)
+        if(toDoInput.style.display === "block"){
+            let toDoDescription = toDoInput.value
+            if(toDoDescription.trim() !== ""){
+                let newToDo = {
+                    description: toDoDescription,
+                    completed: false,
+                }
+                task.toDoList.push(newToDo)
+                saveTasksToLocalStorage()
+                renderToDos(taskIndex)
+            }
+            toDoInput.style.display = "none"
+            
+        }else{
+            toDoInput.style.display = "block"
+            toDoInput.focus()
+        }
     }
 }
 
@@ -148,6 +161,21 @@ function addToDo(taskIndex){
 function renderToDos(taskIndex){
     let toDoListElement = document.getElementById("toDoList")
     toDoListElement.innerHTML = ""
+
+
+    let toDoInput = document.createElement("input")
+    toDoInput.type = "text"
+    toDoInput.placeholder = "Enter a to-do item"
+    toDoInput.style.margin = "1rem"
+    toDoInput.style.padding = "1rem"
+    toDoInput.style.color = "black"
+    toDoInput.style.display = "none"
+    toDoInput.addEventListener("keyup", function (event) {
+        if (event.key === "Enter") {
+            addToDo(taskIndex);
+        }
+    });
+    
 
     //CONTAINER FORT HE GO BACK BUTTON & HEADING
     let toDoHeading = document.createElement("div")
@@ -201,6 +229,7 @@ function renderToDos(taskIndex){
         addToDo(taskIndex)
     })
     
+    toDoListElement.appendChild(toDoInput)
     toDoListElement.appendChild(addToDoButton)
 }
 //==========SETS THE ACTIVE TASK BY INDEX=========
