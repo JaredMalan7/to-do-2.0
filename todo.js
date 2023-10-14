@@ -37,7 +37,7 @@ function createTask(){
     activeTaskIndex = tasks.length -1
     console.log(task)
     renderTasks()
-    renderToDos(task)
+    renderToDos(activeTaskIndex)
     saveTasksToLocalStorage();
 }
 //===============FUNCTION TO RENDER ALL TASK===============
@@ -50,7 +50,7 @@ function renderTasks(){
         //============OBJECT TASK CONTAINER===========
         let listItem = document.createElement("div")
         listItem.style.width = "100%"
-        listItem.style.padding = "1em 0"
+        listItem.style.padding = "1rem"
         listItem.style.display = "flex"
         listItem.style.alignItems = "center"
         listItem.className = "task-container"
@@ -129,13 +129,31 @@ function renderTasks(){
     addButton.appendChild(addIcon)
     buttonContainer.appendChild(addButton)
 }
-//=========FUNCTION TO RENDER TO DO BUTTONS========
+//=========CREATES TO-DO ELEMENTS=============
+function addToDo(taskIndex){
+    if(activeTaskIndex === taskIndex) {
+        let task = tasks[taskIndex]
+        let newToDo = {
+            description: "New To-Do",
+            completed: false,
+        }
+
+        task.toDoList.push(newToDo)
+        saveTasksToLocalStorage()
+        renderToDos(taskIndex)
+    }
+}
+
+//=========RENDERS TO-DO BUTTONS & LIST========
 function renderToDos(taskIndex){
     let toDoListElement = document.getElementById("toDoList")
     toDoListElement.innerHTML = ""
+
     //CONTAINER FORT HE GO BACK BUTTON & HEADING
     let toDoHeading = document.createElement("div")
     toDoHeading.className = "toDoHeading flex place-items-center w-full"
+    toDoHeading.style.padding = "1rem"
+    toDoHeading.style.backgroundColor = "#272727"
 
     // GENERATES THE GO BACK BUTTON
     let goBackButton  = document.createElement("i")
@@ -143,36 +161,49 @@ function renderToDos(taskIndex){
     goBackButton.style.color = "#0073ff"
     goBackButton.style.fontSize = "25px"
     goBackButton.style.width = "10%"
-    // goBackButton.style.marginRight = "-15.63px"
     goBackButton.addEventListener("click", closeTask)
 
     // GENERATES THE TASK NAME HEADING
-    if(taskIndex !== null && tasks[taskIndex] && tasks[taskIndex].taskName){
-        taskNameHeading = taskNameHeading || document.createElement("h2")
+    if(taskIndex !== null && tasks[taskIndex]){
+        activeTaskIndex = taskIndex //sets the active task index
+        taskNameHeading = document.createElement("h2")
         taskNameHeading.className = "w-80 text-center"
         taskNameHeading.style.fontSize = "25px"
         taskNameHeading.textContent = tasks[taskIndex].taskName
         
-    } else {
-        taskNameHeading = taskNameHeading || document.createElement("h2")
-        taskNameHeading.className = "w-80 text-center"
-        taskNameHeading.style.fontSize = "25px"
-        taskNameHeading.textContent = "Untitled"
+        // Append taskNameHeading before to-do items
+        toDoHeading.appendChild(goBackButton)
+        toDoHeading.appendChild(taskNameHeading)
+        toDoListElement.appendChild(toDoHeading)
+
+        tasks[taskIndex].toDoList.forEach((toDoItem, index) =>{
+            let toDoContainer = document.createElement("div")
+            toDoContainer.className = "to-do-item"
+            toDoContainer.textContent = toDoItem.description
+            toDoContainer.style.padding = "1rem"
+            // more code will go here to style this container
+            // ..
+
+            toDoListElement.appendChild(toDoContainer)
+        })
+
     }
-    console.log(taskIndex)
-    // GENERTES THE ADD TO DO BUTTON
+
+    // console.log(taskIndex)
+    // GENERATES THE ADD TO DO BUTTON
     let addToDoButton = document.createElement("button")
     addToDoButton.id = "addToDoButton"
-    addToDoButton.className = "w-fit bg-primary-blue p-3 rounded-3xl flex flex-col justify-center place-items-center mt-4"
+    addToDoButton.className = "w-fit bg-primary-blue p-3 rounded-3xl flex flex-col justify-center place-items-center"
+    addToDoButton.style.margin = "2rem"
     addToDoButton.textContent = `Add To Do`
 
-    toDoListElement.appendChild(toDoHeading)
-    toDoHeading.appendChild(goBackButton)
-    toDoHeading.appendChild(taskNameHeading)
+    addToDoButton.addEventListener("click", function(){
+        addToDo(taskIndex)
+    })
+    
     toDoListElement.appendChild(addToDoButton)
-   
 }
-
+//==========SETS THE ACTIVE TASK BY INDEX=========
 function setActiveTask(index){
     activeTaskIndex = index
 }
@@ -188,11 +219,9 @@ function deleteTask(taskIndex){
     saveTasksToLocalStorage(activeTaskIndex)
 }
 
-//=============EDIT TASK FUNCTION================
-
 //This array separates all input fields so that each task has its own, rather than all sharing the same, which could cause issues by editing all names of tasks at once.
 let editInputFields = []
-
+//=============EDIT TASK FUNCTION================
 function editTask(taskIndex, taskNameHeading){
     let taskObject = document.getElementById("taskContainer").children[taskIndex]
     let taskNameElement = taskObject.querySelector(".task-name")
@@ -250,16 +279,15 @@ function openTask(activeTaskIndex){
    taskContainer.style.width = "0";
    taskContainer.style.padding = "0";
    taskContainer.style.opacity = "0"
-
+   taskContainer.style.overflow = "hidden"
    // Expand the toDoList by increasing its width to 100% and adding padding
    toDoList.style.width = "100%";
-   toDoList.style.padding = "2rem";
+//    toDoList.style.padding = "2rem";
    toDoList.style.opacity = "100"
    renderToDos(activeTaskIndex)
 }
 
 //============CLOSE TASK FUNCTION============
-
 function closeTask(){
     const toDoList = document.getElementById("toDoList")
     const taskContainer = document.getElementById("taskContainer")
@@ -276,6 +304,5 @@ function closeTask(){
     taskContainer.style.padding = "1rem";
     taskContainer.style.opacity = "100"
  }
-
 
 renderTasks()
