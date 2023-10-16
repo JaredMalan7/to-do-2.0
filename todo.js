@@ -1,6 +1,6 @@
 //CREATE A TASK OBJECT THAT CONTAINS A TAKSNAME AND TASKS ARRAY
 let tasks = []
-let taskNameHeading;
+let taskNameHeading
 let activeTaskIndex = null
 
 function saveTasksToLocalStorage(){
@@ -38,15 +38,15 @@ function createTask(){
     console.log(task)
     renderTasks()
     renderToDos(activeTaskIndex)
-    saveTasksToLocalStorage();
+    saveTasksToLocalStorage()
 }
 //===============FUNCTION TO RENDER ALL TASK===============
 function renderTasks(){
     let taskElement = document.getElementById("taskContainer")
-    taskElement.innerHTML = "";
+    taskElement.innerHTML = ""
 
     for(let i = 0; i < tasks.length; i++) {
-        let taskName = tasks[i].taskName;
+        let taskName = tasks[i].taskName
         //============OBJECT TASK CONTAINER===========
         let listItem = document.createElement("div")
         listItem.style.width = "100%"
@@ -131,7 +131,6 @@ function renderTasks(){
 }
 //=========CREATES TO-DO ELEMENTS=============
 function addToDo(taskIndex){
-    event.preventDefault()
     
     if(activeTaskIndex === taskIndex) {
         let task = tasks[taskIndex]
@@ -172,9 +171,9 @@ function renderToDos(taskIndex){
     toDoInput.style.display = "none"
     toDoInput.addEventListener("keyup", function (event) {
         if (event.key === "Enter") {
-            addToDo(taskIndex);
+            addToDo(taskIndex)
         }
-    });
+    })
     
 
     //CONTAINER FORT HE GO BACK BUTTON & HEADING
@@ -206,14 +205,54 @@ function renderToDos(taskIndex){
 
         tasks[taskIndex].toDoList.forEach((toDoItem, index) =>{
             let toDoContainer = document.createElement("div")
-            toDoContainer.className = "to-do-item"
-            toDoContainer.textContent = toDoItem.description
+            toDoContainer.className = "to-do-item flex place-items-center"
+            // toDoContainer.textContent = toDoItem.description
             toDoContainer.style.padding = "1rem"
-            // more code will go here to style this container
-            // ..
 
-            toDoListElement.appendChild(toDoContainer)
+            // creates a checkbox for the to-do-item
+            let checkbox = document.createElement("input")
+            checkbox.type = "checkbox"
+            checkbox.checked = toDoItem.completed
+            
+
+            // Attach an event listener to the checkbox to mark as completed
+            checkbox.addEventListener("change", function () {
+            toDoItem.completed = checkbox.checked
+            if (checkbox.checked) {
+                toDoContainer.style.textDecoration = "line-through"
+            } else {
+                toDoContainer.style.textDecoration = "none"
+            }
+            saveTasksToLocalStorage()
         })
+
+        let toDoValue = document.createElement("div")
+        toDoValue.className = "toDoValue"
+        toDoValue.textContent = toDoItem.description
+        toDoValue.style.padding = "1rem"
+
+        toDoContainer.appendChild(checkbox)
+
+        toDoContainer.appendChild(toDoValue)
+
+        toDoListElement.appendChild(toDoContainer)
+        })
+
+        if (tasks[taskIndex].toDoList.some((item) => item.completed)) {
+            let deleteCompletedButton = document.createElement("button")
+            deleteCompletedButton.textContent = "Delete Completed"
+            deleteCompletedButton.addEventListener("click", function () {
+                // Remove completed to-do items and save changes
+                tasks[taskIndex].toDoList = tasks[taskIndex].toDoList.filter(
+                    (item) => !item.completed
+                )
+                saveTasksToLocalStorage()
+                renderToDos(taskIndex)
+            })
+            toDoListElement.appendChild(toDoInput)
+            toDoListElement.appendChild(deleteCompletedButton)
+        }
+
 
     }
 
@@ -231,6 +270,7 @@ function renderToDos(taskIndex){
     
     toDoListElement.appendChild(toDoInput)
     toDoListElement.appendChild(addToDoButton)
+
 }
 //==========SETS THE ACTIVE TASK BY INDEX=========
 function setActiveTask(index){
@@ -293,7 +333,7 @@ function editTask(taskIndex, taskNameHeading){
     editInputFields[taskIndex].value = currentTaskName
     editInputFields[taskIndex].style.display = "block"
     taskNameElement.style.display = "none"
-    taskObject.insertBefore(editInputFields[taskIndex], taskObject.querySelector(".buttons-container"));
+    taskObject.insertBefore(editInputFields[taskIndex], taskObject.querySelector(".buttons-container"))
 }
 
 //============OPEN TASKS FUNCTION============
@@ -301,17 +341,17 @@ function openTask(activeTaskIndex){
    const toDoList = document.getElementById("toDoList")
    const taskContainer = document.getElementById("taskContainer")
 
-   taskContainer.style.transition = "width 0.5s ease-in-out, padding 0.6s ease-in-out, opacity 0.4s ease-in-out";
-   toDoList.style.transition = "width 0.5s ease-in-out, padding 0.5s ease-in-out, opacity 0.5s ease-in-out";
+   taskContainer.style.transition = "width 0.5s ease-in-out, padding 0.6s ease-in-out, opacity 0.4s ease-in-out"
+   toDoList.style.transition = "width 0.5s ease-in-out, padding 0.5s ease-in-out, opacity 0.5s ease-in-out"
 
    // Hide the taskContainer by reducing its width and padding to 0
-   taskContainer.style.width = "0";
-   taskContainer.style.padding = "0";
+   taskContainer.style.width = "0"
+   taskContainer.style.padding = "0"
    taskContainer.style.opacity = "0"
    taskContainer.style.overflow = "hidden"
    // Expand the toDoList by increasing its width to 100% and adding padding
-   toDoList.style.width = "100%";
-//    toDoList.style.padding = "2rem";
+   toDoList.style.width = "100%"
+//    toDoList.style.padding = "2rem"
    toDoList.style.opacity = "100"
    renderToDos(activeTaskIndex)
 }
@@ -321,16 +361,16 @@ function closeTask(){
     const toDoList = document.getElementById("toDoList")
     const taskContainer = document.getElementById("taskContainer")
  
-    taskContainer.style.transition = "width 0.5s ease-in-out, padding .6s ease-in-out, opacity 0.65s ease-in-out";
-    toDoList.style.transition = "width 0.5s ease-in-out, padding .6s ease-in-out, opacity 0.5s ease-in-out";
+    taskContainer.style.transition = "width 0.5s ease-in-out, padding .6s ease-in-out, opacity 0.65s ease-in-out"
+    toDoList.style.transition = "width 0.5s ease-in-out, padding .6s ease-in-out, opacity 0.5s ease-in-out"
     // Hide the taskContainer by reducing its width and padding to 0
-    toDoList.style.width = "0";
-    toDoList.style.padding = "0";
+    toDoList.style.width = "0"
+    toDoList.style.padding = "0"
     toDoList.style.opacity = "0"
  
     // Expand the toDoList by increasing its width to 100% and adding padding
-    taskContainer.style.width = "100%";
-    taskContainer.style.padding = "1rem";
+    taskContainer.style.width = "100%"
+    taskContainer.style.padding = "1rem"
     taskContainer.style.opacity = "100"
  }
 
