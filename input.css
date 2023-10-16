@@ -38,5 +38,10 @@
     #toDoList{
         background-color: rgb(25, 25, 25);
     }
-
+    .delete-todo{
+        display: none;
+    }
+    .to-do-item:hover .delete-todo{
+       display: block;
+    }
 }

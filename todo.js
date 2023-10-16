@@ -117,11 +117,11 @@ function renderTasks(){
     let buttonContainer = document.getElementById("taskContainer")
     let addButton = document.createElement("button")
     addButton.id = "add-task"
-    addButton.className = "ml-4 w-fit"
+    addButton.className = "m-4 w-fit"
     addButton.addEventListener("click", createTask)
 
     let addIcon = document.createElement("i")
-    addIcon.className = "fa-solid fa-plus mr-1 add-task bg-primary-blue rounded-2xl"
+    addIcon.className = "fa-solid fa-plus add-task bg-primary-blue rounded-2xl"
     addIcon.style.color = "white"
 
     addButton.appendChild(addIcon)
@@ -151,6 +151,17 @@ function addToDo(taskIndex){
             toDoInput.style.display = "block"
             toDoInput.focus()
         }
+    }
+}
+
+function deleteTodoItem(taskIndex, itemIndex){
+    if (taskIndex !== null && tasks[taskIndex]){
+
+        tasks[taskIndex].toDoList.splice(itemIndex, 1)
+
+        saveTasksToLocalStorage()
+
+        renderToDos(taskIndex)
     }
 }
 
@@ -203,7 +214,14 @@ function renderToDos(taskIndex){
 
         tasks[taskIndex].toDoList.forEach((toDoItem, index) =>{
             let toDoContainer = document.createElement("div")
-            toDoContainer.className = `to-do-item flex place-items-center p-4 ${toDoItem.completed ? "line-through" : ""}`
+            toDoContainer.className = `to-do-item flex place-items-center p-4`
+
+            let toDoValue = document.createElement("div")
+            toDoValue.className = "toDoValue"
+            toDoValue.textContent = toDoItem.description
+            toDoValue.style.padding = "1rem"
+            toDoValue.style.fontSize = "20px"
+            toDoItem.completed && (toDoValue.className = "line-through")
             // toDoContainer.textContent = toDoItem.description
             // toDoContainer.style.alignItems = "center"
 
@@ -216,23 +234,26 @@ function renderToDos(taskIndex){
             // Attach an event listener to the checkbox to mark as completed
             checkbox.addEventListener("change", function () {
             toDoItem.completed = checkbox.checked
-            toDoContainer.classList.toggle("line-through")
+            toDoValue.classList.toggle("line-through")
 
-     
+
             saveTasksToLocalStorage()
             renderToDos(taskIndex)
         })
 
-        let toDoValue = document.createElement("div")
-        toDoValue.className = "toDoValue"
-        toDoValue.textContent = toDoItem.description
-        toDoValue.style.padding = "1rem"
-        toDoValue.style.fontSize = "20px"
+        let deleteToDo = document.createElement("i")
+        deleteToDo.className = "fa-solid fa-trash delete-todo ml-2.5"
+        deleteToDo.style.color = "#0073ff"
+        deleteToDo.addEventListener("click", function(){
+            let itemIndex = tasks[taskIndex].toDoList.indexOf(toDoItem)
 
+            deleteTodoItem(taskIndex, itemIndex)
+        })
+        
         toDoContainer.appendChild(checkbox)
 
         toDoContainer.appendChild(toDoValue)
-
+        toDoContainer.appendChild(deleteToDo)
         toDoListElement.appendChild(toDoContainer)
         })
 

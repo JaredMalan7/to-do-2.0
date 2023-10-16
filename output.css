@@ -463,6 +463,14 @@ i{
   background-color: rgb(25, 25, 25);
 }
 
+.delete-todo{
+  display: none;
+}
+
+.to-do-item:hover .delete-todo{
+  display: block;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -571,12 +579,24 @@ i{
   position: relative;
 }
 
+.m-4 {
+  margin: 1rem;
+}
+
 .ml-4 {
   margin-left: 1rem;
 }
 
 .mr-1 {
   margin-right: 0.25rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.ml-2\.5 {
+  margin-left: 0.625rem;
 }
 
 .block {
@@ -663,16 +683,12 @@ i{
   padding: 0.5rem;
 }
 
-.p-3 {
-  padding: 0.75rem;
+.p-2\.5 {
+  padding: 0.625rem;
 }
 
 .p-4 {
   padding: 1rem;
-}
-
-.p-2\.5 {
-  padding: 0.625rem;
 }
 
 .text-center {
