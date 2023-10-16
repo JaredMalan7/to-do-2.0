@@ -214,7 +214,7 @@ function renderToDos(taskIndex){
 
         tasks[taskIndex].toDoList.forEach((toDoItem, index) =>{
             let toDoContainer = document.createElement("div")
-            toDoContainer.className = `to-do-item flex place-items-center p-4`
+            toDoContainer.className = `to-do-item flex place-items-center p-4 w-full justify-center relative`
 
             let toDoValue = document.createElement("div")
             toDoValue.className = "toDoValue"
@@ -241,8 +241,10 @@ function renderToDos(taskIndex){
             renderToDos(taskIndex)
         })
 
+        //Button for to delete items from the ToDoList array individually
         let deleteToDo = document.createElement("i")
-        deleteToDo.className = "fa-solid fa-trash delete-todo ml-2.5"
+        deleteToDo.className = "fa-solid fa-trash delete-todo ml-2.5 absolute"
+        deleteToDo.style.right = "40%"
         deleteToDo.style.color = "#0073ff"
         deleteToDo.addEventListener("click", function(){
             let itemIndex = tasks[taskIndex].toDoList.indexOf(toDoItem)
@@ -260,7 +262,7 @@ function renderToDos(taskIndex){
         if (tasks[taskIndex].toDoList.some((item) => item.completed)) {
             let deleteCompletedButton = document.createElement("button")
             deleteCompletedButton.className = "bg-primary-blue p-2.5 rounded-full"
-            deleteCompletedButton.textContent = "Delete Completed"
+            deleteCompletedButton.textContent = "Clear Completed"
             deleteCompletedButton.style.position = "absolute"
             deleteCompletedButton.style.right = "2%"
             deleteCompletedButton.style.fontSize = "14px"
