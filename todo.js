@@ -29,8 +29,6 @@ function createTask(){
     // if (activeTaskIndex !== null && tasks[activeTaskIndex].taskName.trim() !== ""){
     //     task.taskName = tasks[activeTaskIndex].taskName
 
-
-
     // }
 
     tasks.push(task)
@@ -205,9 +203,9 @@ function renderToDos(taskIndex){
 
         tasks[taskIndex].toDoList.forEach((toDoItem, index) =>{
             let toDoContainer = document.createElement("div")
-            toDoContainer.className = "to-do-item flex place-items-center"
+            toDoContainer.className = `to-do-item flex place-items-center p-4 ${toDoItem.completed ? "line-through" : ""}`
             // toDoContainer.textContent = toDoItem.description
-            toDoContainer.style.padding = "1rem"
+            // toDoContainer.style.alignItems = "center"
 
             // creates a checkbox for the to-do-item
             let checkbox = document.createElement("input")
@@ -218,18 +216,18 @@ function renderToDos(taskIndex){
             // Attach an event listener to the checkbox to mark as completed
             checkbox.addEventListener("change", function () {
             toDoItem.completed = checkbox.checked
-            if (checkbox.checked) {
-                toDoContainer.style.textDecoration = "line-through"
-            } else {
-                toDoContainer.style.textDecoration = "none"
-            }
+            toDoContainer.classList.toggle("line-through")
+
+     
             saveTasksToLocalStorage()
+            renderToDos(taskIndex)
         })
 
         let toDoValue = document.createElement("div")
         toDoValue.className = "toDoValue"
         toDoValue.textContent = toDoItem.description
         toDoValue.style.padding = "1rem"
+        toDoValue.style.fontSize = "20px"
 
         toDoContainer.appendChild(checkbox)
 
@@ -240,7 +238,11 @@ function renderToDos(taskIndex){
 
         if (tasks[taskIndex].toDoList.some((item) => item.completed)) {
             let deleteCompletedButton = document.createElement("button")
+            deleteCompletedButton.className = "bg-primary-blue p-2.5 rounded-full"
             deleteCompletedButton.textContent = "Delete Completed"
+            deleteCompletedButton.style.position = "absolute"
+            deleteCompletedButton.style.right = "2%"
+            deleteCompletedButton.style.fontSize = "14px"
             deleteCompletedButton.addEventListener("click", function () {
                 // Remove completed to-do items and save changes
                 tasks[taskIndex].toDoList = tasks[taskIndex].toDoList.filter(
@@ -250,7 +252,7 @@ function renderToDos(taskIndex){
                 renderToDos(taskIndex)
             })
             toDoListElement.appendChild(toDoInput)
-            toDoListElement.appendChild(deleteCompletedButton)
+            toDoHeading.appendChild(deleteCompletedButton)
         }
 
 
@@ -260,7 +262,7 @@ function renderToDos(taskIndex){
     // GENERATES THE ADD TO DO BUTTON
     let addToDoButton = document.createElement("button")
     addToDoButton.id = "addToDoButton"
-    addToDoButton.className = "w-fit bg-primary-blue p-3 rounded-3xl flex flex-col justify-center place-items-center"
+    addToDoButton.className = "w-fit bg-primary-blue p-2 rounded-3xl flex flex-col justify-center place-items-center"
     addToDoButton.style.margin = "2rem"
     addToDoButton.textContent = `Add To Do`
 
@@ -370,7 +372,7 @@ function closeTask(){
  
     // Expand the toDoList by increasing its width to 100% and adding padding
     taskContainer.style.width = "100%"
-    taskContainer.style.padding = "1rem"
+    taskContainer.style.padding = "0"
     taskContainer.style.opacity = "100"
  }
 
